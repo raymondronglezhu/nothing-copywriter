@@ -10,7 +10,7 @@ A plugin for rewriting UI copy across selected Figma screens with consistent sty
 - Supports one-step undo of the last rewrite batch.
 - Shows diagnostics inside the plugin (no Figma dev console required).
 
-## Install from GitHub (Designer-Friendly)
+## Install from GitHub
 
 1. Open the GitHub repo:
    - [https://github.com/raymondronglezhu/nothing-copywriter](https://github.com/raymondronglezhu/nothing-copywriter)
