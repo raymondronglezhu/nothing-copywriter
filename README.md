@@ -10,36 +10,42 @@ A plugin for rewriting UI copy across selected Figma screens with consistent sty
 - Supports one-step undo of the last rewrite batch.
 - Shows diagnostics inside the plugin (no Figma dev console required).
 
-## Setup
+## Install from GitHub (Designer-Friendly)
 
-1. Open Figma desktop app.
-2. Go to `Plugins -> Development -> Import plugin from manifest...`.
-3. Select `manifest.json`.
-4. Run `Nothing Copywriter` from `Plugins -> Development`.
+1. Open the GitHub repo:
+   - [https://github.com/raymondronglezhu/nothing-copywriter](https://github.com/raymondronglezhu/nothing-copywriter)
+2. Click the green `Code` button, then click `Download ZIP`.
+3. Unzip the downloaded file on your computer.
+4. Open the **Figma Desktop App**.
+5. In Figma, go to:
+   - `Plugins -> Development -> Import plugin from manifest...`
+6. In the unzipped folder, select `manifest.json`.
+7. Run the plugin:
+   - `Plugins -> Development -> Nothing Copywriter`
 
-## Style Prompt Source
+## First-time setup
 
-- Preset system prompts are sourced from JSON files in `/styles`.
-- Current files:
-  - `styles/Generic UX.json`
-  - `styles/Nothing-style.json`
-- After editing style JSON, regenerate the UI prompt bundle:
-  - `node scripts/sync-style-prompts.js`
-- The sync script updates:
-  - `styles/style-prompts.generated.js` (generated artifact)
-  - inline prompt block in `ui.html` used at runtime by Figma
+1. Open the plugin.
+2. Paste your OpenAI API key in `OpenAI API Key`.
+3. Choose a style preset (`Generic UX`, `Nothing-style`, or `Custom`).
+4. If you choose `Custom`, add your additional rules.
 
-## Usage
+## How to use
 
 1. Select one or more frames/screens in your Figma file.
-2. In the plugin UI:
-   - add OpenAI API key,
-   - model is fixed to `gpt-5.2`,
-   - choose style preset (`Generic UX`, `Nothing-style`, or `Custom`),
-   - add custom style rules when `Custom` is selected.
-3. Click `Rewrite all` to generate suggestions for unique strings.
-4. Review/edit text directly inside each card, then click that card’s `Update` button to apply changes.
-5. Click `Undo all` to revert plugin-applied changes in this session.
+2. Click `Rewrite all` to generate suggestions for unique strings.
+3. Review or edit text directly in each card.
+4. Click `Update` on a card to apply that change to your design.
+5. Click `Undo all` if you want to revert plugin-applied changes in this session.
+
+## Optional: Editing style prompts (advanced)
+
+- Preset prompts live in:
+  - `styles/Generic UX.json`
+  - `styles/Nothing-style.json`
+- After editing those files, run:
+  - `node scripts/sync-style-prompts.js`
+- This refreshes prompt data used by the plugin UI.
 
 ## Notes
 
