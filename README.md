@@ -12,8 +12,8 @@ A plugin for rewriting UI copy across selected Figma screens with consistent sty
 
 ## Install from GitHub
 
-1. Download the repo as a .zip file. 
-3. Unzip the downloaded file on your computer under `Code`.
+1. Download the repo as a .zip file under `Code`.
+3. Unzip the downloaded file on your computer.
 4. Open the **Figma Desktop App**.
 5. In Figma, go to:
    - `Plugins -> Development -> Import plugin from manifest...`
