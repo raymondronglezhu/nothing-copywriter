@@ -1,0 +1,1998 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nothing Copywriter</title>
+    <style>
+      :root {
+        --bg: #090a0b;
+        --bg-soft: #0f1114;
+        --panel: #131418;
+        --panel-soft: #17191e;
+        --ink: #f5f6f8;
+        --muted: #9ea2aa;
+        --line: #292c33;
+        --line-strong: #3a3e48;
+        --accent: #f5f6f8;
+        --accent-hover: #ffffff;
+        --accent-ink: #0d0f12;
+        --secondary: #1c1f25;
+        --secondary-hover: #232732;
+        --secondary-ink: #f5f6f8;
+        --ok: #7ad9a4;
+        --warn: #f0c16f;
+        --error: #ff9a9a;
+        --chip: #ffffff;
+        --chip-ink: #0b0c0e;
+        --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 12px;
+        font-family: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0) 0 0 / 12px 12px,
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+        display: flex;
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0.01) 100%),
+          var(--panel);
+        padding: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .settings-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        font-size: 11px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        font: inherit;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 10px;
+        background: var(--panel-soft);
+        color: var(--ink);
+        transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: #7c828d;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+      }
+
+      textarea {
+        min-height: 72px;
+        resize: vertical;
+      }
+
+      .row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      button {
+        border: 1px solid var(--line-strong);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: transform 0.12s ease, background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+      }
+
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: var(--accent-ink);
+        border-color: var(--accent);
+      }
+
+      .btn-primary:hover:enabled {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: var(--secondary);
+        color: var(--secondary-ink);
+      }
+
+      .btn-secondary:hover:enabled {
+        background: var(--secondary-hover);
+        border-color: #4a5060;
+        transform: translateY(-1px);
+      }
+
+      .hint {
+        margin: 10px 0 0;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+
+      .loading-state {
+        margin-top: 10px;
+        display: grid;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.01em;
+      }
+
+      .loading-text {
+        line-height: 1.3;
+      }
+
+      .loading-bar {
+        position: relative;
+        width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        border: 1px solid #2a2d35;
+        background: #14171d;
+        overflow: hidden;
+      }
+
+      .loading-bar-fill {
+        position: absolute;
+        top: 0;
+        left: -40%;
+        width: 40%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, var(--accent) 50%, rgba(255, 255, 255, 0.2) 100%);
+        animation: loading-slide 1s ease-in-out infinite;
+      }
+
+      @keyframes loading-slide {
+        0% {
+          left: -40%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      .status {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #15181d;
+        padding: 8px 10px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .status.ok {
+        border-color: rgba(122, 217, 164, 0.45);
+        color: var(--ok);
+        background: rgba(122, 217, 164, 0.08);
+      }
+
+      .status.warn {
+        border-color: rgba(240, 193, 111, 0.45);
+        color: var(--warn);
+        background: rgba(240, 193, 111, 0.08);
+      }
+
+      .status.error {
+        border-color: rgba(255, 154, 154, 0.5);
+        color: var(--error);
+        background: rgba(255, 154, 154, 0.08);
+      }
+
+      .summary {
+        margin: 9px 0 0;
+        font-size: 11px;
+        letter-spacing: 0.01em;
+        color: var(--muted);
+      }
+
+      .content-card {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+
+      .list {
+        margin-top: 11px;
+        display: grid;
+        gap: 10px;
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        overflow: auto;
+        align-content: start;
+        padding-right: 2px;
+      }
+
+      .list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .list::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .list::-webkit-scrollbar-thumb {
+        background: #353943;
+        border-radius: 999px;
+      }
+
+      .list::-webkit-scrollbar-thumb:hover {
+        background: #4a505e;
+      }
+
+      .empty {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .item {
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        padding: 9px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.008) 100%),
+          var(--panel-soft);
+      }
+
+      .item-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .item-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .item-name {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .instance-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 8px;
+        border-radius: 999px;
+        background: var(--chip);
+        color: var(--chip-ink);
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .change-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 8px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+
+      .change-chip.ai {
+        background: rgba(122, 217, 164, 0.14);
+        color: #9be3bc;
+        border: 1px solid rgba(122, 217, 164, 0.42);
+      }
+
+      .change-chip.edit {
+        background: rgba(240, 193, 111, 0.14);
+        color: #f4cb85;
+        border: 1px solid rgba(240, 193, 111, 0.42);
+      }
+
+      .item-parent {
+        margin-top: 2px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .item-editor {
+        margin-top: 7px;
+        width: 100%;
+        min-height: 72px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: #111318;
+        font-size: 12px;
+        font-family: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+        white-space: pre-wrap;
+        line-height: 1.4;
+        resize: vertical;
+      }
+
+      .item-controls {
+        margin-top: 8px;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .item-update-btn {
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        border: 1px solid var(--line-strong);
+        background: var(--accent);
+        color: var(--accent-ink);
+      }
+
+      .item-update-btn:hover:enabled {
+        background: var(--accent-hover);
+      }
+
+      .missing {
+        margin-top: 6px;
+        display: inline-block;
+        font-size: 11px;
+        color: var(--error);
+        background: rgba(255, 154, 154, 0.1);
+        border: 1px solid rgba(255, 154, 154, 0.45);
+        border-radius: 999px;
+        padding: 2px 8px;
+      }
+
+      details {
+        padding: 0;
+      }
+
+      details > summary {
+        cursor: pointer;
+        padding: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        list-style: none;
+      }
+
+      details > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .diag-log {
+        margin: 0 12px 12px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #111318;
+        padding: 10px;
+        font-size: 11px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        max-height: 220px;
+        overflow: auto;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (max-width: 420px) {
+        .row-2,
+        .actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section class="card settings-grid">
+        <div class="row-2">
+          <label>
+            OpenAI API Key
+            <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" />
+          </label>
+
+          <label>
+            Style preset
+            <select id="stylePreset">
+              <option value="generic_ux">Generic UX</option>
+              <option value="nothing_style">Nothing-style</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+        </div>
+
+        <label id="customRulesWrap" class="hidden">
+          Additional style rules (optional)
+          <textarea
+            id="customGuide"
+            placeholder="Example: Use second-person voice, avoid jargon, keep CTA labels under 4 words."
+          ></textarea>
+        </label>
+      </section>
+
+      <section class="card">
+        <div class="actions">
+          <button id="rewriteBtn" class="btn-primary" type="button">Rewrite all</button>
+          <button id="undoBtn" class="btn-secondary" type="button">Undo all</button>
+        </div>
+        <p class="hint">Rewrite all prepares suggested copy. Each card updates only when you press its Update button.</p>
+        <div id="loadingState" class="loading-state hidden" aria-live="polite">
+          <span id="loadingText" class="loading-text">Working...</span>
+          <div class="loading-bar" aria-hidden="true">
+            <div class="loading-bar-fill"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card content-card">
+        <div id="status" class="status">Waiting for selection...</div>
+        <p id="summary" class="summary"></p>
+        <div id="items" class="list"></div>
+      </section>
+
+      <details class="card hidden">
+        <summary>Diagnostics (<span id="diagCount">0</span>)</summary>
+        <pre id="diagLog" class="diag-log">No diagnostics yet.</pre>
+      </details>
+    </main>
+
+    <script>
+      /* STYLE_PROMPTS_GENERATED_START */
+      const STYLE_PROMPT_PRESETS_BUNDLED = {
+        "generic_ux": "You are a senior UX writer embedded inside a Figma plugin.\nYou receive all visible UI strings from one or multiple frames simultaneously.\nYour job is to rewrite weak, unclear, awkward, or unprofessional copy into professional UX writing.\n\nCORE RULES\n1) Do NOT redesign the product. Do NOT add features or new meaning.\n2) Preserve the original meaning. Improve wording only.\n3) Preserve casing EXACTLY as provided (ALL CAPS, sentence case, Title Case, lowercase). Never change casing style.\n4) Preserve structure: keep order, grouping, bullets, and line breaks.\n5) If a string is already solid and professional, DO NOT change it.\n6) Do not rewrite just to sound different. No synonym swapping.\n7) Keep copy concise. Do not make text longer unless needed for clarity or instruction.\n8) Keep button labels short (1–3 words when possible).\n9) Keep product names / feature names / proper nouns unchanged.\n10) Avoid exclamation marks and marketing fluff unless clearly required.\n\nSTYLE: GENERIC UX (MOBILE, ANDROID-ALIGNED)\n- Clear > clever\n- Short > long\n- Specific > vague\n- Active voice\n- Neutral, helpful tone\n- Prefer verb-led buttons (e.g., 'Save', 'Retry', 'Turn on Wi-Fi')\n- Prefer standard mobile phrasing (e.g., 'No internet connection', 'Try again')\n- Ongoing states can use ellipsis or gerunds when appropriate (e.g., 'Saving…', 'Updating…')\n- Error message pattern: state problem → give action\n\nOUTPUT REQUIREMENTS\n- Return ONLY the rewritten strings in the same order and grouping as input.\n- No explanations, no annotations, no extra commentary.",
+        "nothing_style": "You are a senior UX writer embedded inside a Figma plugin.\nYou receive all visible UI strings from one or multiple frames simultaneously.\nYour job is to rewrite weak, unclear, awkward, or unprofessional copy into professional UX writing in Nothing-style.\n\nCORE RULES\n1) Do NOT redesign the product. Do NOT add features or new meaning.\n2) Preserve the original meaning. Improve wording only.\n3) Preserve casing EXACTLY as provided (ALL CAPS, sentence case, Title Case, lowercase). Never change casing style.\n4) Preserve structure: keep order, grouping, bullets, and line breaks.\n5) If a string is already solid and professional, DO NOT change it.\n6) Do not rewrite just to sound different. No synonym swapping.\n7) Keep copy concise. Prefer fewer words. Do not add extra politeness.\n8) Keep button labels short (1–3 words when possible).\n9) Keep product names / feature names / proper nouns unchanged.\n10) Avoid cheerleading, emojis, exclamation marks, and marketing language unless explicitly present.\n\nSTYLE: NOTHING-STYLE\n- Concise, direct, confident\n- Slightly bold tone, not cute\n- Minimal filler (avoid 'please', 'we', 'your' unless needed)\n- Functional and intentional\n- Short sentences. Strong verbs.\n- Errors: blunt + helpful. Prefer short action prompts.\n\nOUTPUT REQUIREMENTS\n- Return ONLY the rewritten strings in the same order and grouping as input.\n- No explanations, no annotations, no extra commentary."
+      };
+      /* STYLE_PROMPTS_GENERATED_END */
+
+      const DEFAULT_PRESET_SYSTEM_PROMPTS = {
+        generic_ux:
+          "You are an expert UX Copywriter and Content Strategist. Create clear, concise, and useful copy. Preserve original meaning, structure, and casing.",
+        nothing_style:
+          "You are the lead copywriter for Nothing. Keep copy concise, direct, and functional while preserving original meaning, structure, and casing."
+      };
+
+      const HAS_BUNDLED_STYLE_PROMPTS =
+        typeof STYLE_PROMPT_PRESETS_BUNDLED === "object" && STYLE_PROMPT_PRESETS_BUNDLED !== null;
+
+      function resolvePresetSystemPrompts() {
+        if (!HAS_BUNDLED_STYLE_PROMPTS) {
+          return DEFAULT_PRESET_SYSTEM_PROMPTS;
+        }
+
+        const presets = { ...DEFAULT_PRESET_SYSTEM_PROMPTS };
+        const keys = Object.keys(DEFAULT_PRESET_SYSTEM_PROMPTS);
+
+        for (let i = 0; i < keys.length; i += 1) {
+          const key = keys[i];
+          const value = STYLE_PROMPT_PRESETS_BUNDLED[key];
+          if (typeof value === "string" && value.trim().length > 0) {
+            presets[key] = value.trim();
+          }
+        }
+
+        return presets;
+      }
+
+      const PRESET_SYSTEM_PROMPTS = resolvePresetSystemPrompts();
+
+      const CUSTOM_SYSTEM_PROMPT =
+        "You are an expert UX Copywriter and Content Strategist. Follow the custom style rules exactly while keeping copy clear, concise, and useful.";
+
+      const STORAGE_KEY = "nothing-copywriter-settings";
+      const UI_VERSION = "2026-02-25-nc1";
+      const MAX_DIAGNOSTICS = 300;
+
+      const state = {
+        items: [],
+        busy: false,
+        busyAction: "",
+        busyLabel: "",
+        undoAllMode: false,
+        undoAllTotals: null,
+        diagnostics: [],
+        undoAvailable: false,
+        lastSelectionCount: 0,
+        lastTextNodeCount: 0,
+        groupDrafts: new Map(),
+        rewriteDraftGroups: new Set(),
+        groupCurrentText: new Map(),
+        groupHistory: new Map()
+      };
+
+      const $ = (id) => document.getElementById(id);
+
+      const apiKeyInput = $("apiKey");
+      const stylePresetSelect = $("stylePreset");
+      const customRulesWrap = $("customRulesWrap");
+      const customGuideInput = $("customGuide");
+      const rewriteBtn = $("rewriteBtn");
+      const undoBtn = $("undoBtn");
+      const loadingStateEl = $("loadingState");
+      const loadingTextEl = $("loadingText");
+      const statusEl = $("status");
+      const summaryEl = $("summary");
+      const itemsEl = $("items");
+      const diagCountEl = $("diagCount");
+      const diagLogEl = $("diagLog");
+
+      function postToPlugin(message) {
+        parent.postMessage(
+          {
+            pluginMessage: message
+          },
+          "*"
+        );
+      }
+
+      function scrubSecrets(value) {
+        if (typeof value !== "string") {
+          return value;
+        }
+
+        return value.replace(/sk-[A-Za-z0-9_-]{16,}/g, "sk-***REDACTED***");
+      }
+
+      function truncate(value, maxLength) {
+        const text = scrubSecrets(String(value || ""));
+
+        if (text.length <= maxLength) {
+          return text;
+        }
+
+        return text.slice(0, maxLength) + "...(truncated)";
+      }
+
+      function sanitizeForLog(value, depth) {
+        const safeDepth = typeof depth === "number" ? depth : 0;
+
+        if (value === null || value === undefined) {
+          return value;
+        }
+
+        if (typeof value === "string") {
+          return truncate(value, 2000);
+        }
+
+        if (typeof value === "number" || typeof value === "boolean") {
+          return value;
+        }
+
+        if (value instanceof Error) {
+          return {
+            name: truncate(value.name || "Error", 120),
+            message: truncate(value.message || "Unknown error", 1200),
+            stack: truncate(value.stack || "", 3500)
+          };
+        }
+
+        if (Array.isArray(value)) {
+          const next = [];
+          const limit = Math.min(value.length, 40);
+          for (let i = 0; i < limit; i += 1) {
+            next.push(sanitizeForLog(value[i], safeDepth + 1));
+          }
+          if (value.length > limit) {
+            next.push("..." + String(value.length - limit) + " more item(s)");
+          }
+          return next;
+        }
+
+        if (typeof value === "object") {
+          if (safeDepth > 4) {
+            return "[Object]";
+          }
+
+          const out = {};
+          const entries = Object.entries(value);
+          const limit = Math.min(entries.length, 40);
+
+          for (let i = 0; i < limit; i += 1) {
+            const key = entries[i][0];
+            const nested = entries[i][1];
+            out[key] = sanitizeForLog(nested, safeDepth + 1);
+          }
+
+          if (entries.length > limit) {
+            out.__truncated = String(entries.length - limit) + " key(s) omitted";
+          }
+
+          return out;
+        }
+
+        return truncate(value, 500);
+      }
+
+      function normalizeDiagnostic(entry) {
+        if (!entry || typeof entry !== "object") {
+          return {
+            timestamp: new Date().toISOString(),
+            source: "ui",
+            level: "warn",
+            message: "Invalid diagnostic entry.",
+            details: sanitizeForLog(entry, 0)
+          };
+        }
+
+        return {
+          timestamp:
+            typeof entry.timestamp === "string" && entry.timestamp.length > 0
+              ? entry.timestamp
+              : new Date().toISOString(),
+          source: typeof entry.source === "string" ? entry.source : "ui",
+          level: typeof entry.level === "string" ? entry.level : "info",
+          message: truncate(entry.message || "No message", 2000),
+          details: sanitizeForLog(entry.details, 0)
+        };
+      }
+
+      function renderDiagnostics() {
+        diagCountEl.textContent = String(state.diagnostics.length);
+
+        if (state.diagnostics.length === 0) {
+          diagLogEl.textContent = "No diagnostics yet.";
+          return;
+        }
+
+        const lines = [];
+
+        for (let i = 0; i < state.diagnostics.length; i += 1) {
+          const entry = state.diagnostics[i];
+          lines.push(
+            "[" +
+              String(i + 1) +
+              "] " +
+              entry.timestamp +
+              " " +
+              String(entry.source).toUpperCase() +
+              "/" +
+              String(entry.level).toUpperCase()
+          );
+          lines.push(entry.message);
+
+          if (entry.details !== undefined && entry.details !== null) {
+            try {
+              lines.push(JSON.stringify(entry.details, null, 2));
+            } catch (error) {
+              lines.push(truncate(String(entry.details), 1000));
+            }
+          }
+
+          lines.push("");
+        }
+
+        diagLogEl.textContent = lines.join("\n");
+      }
+
+      function appendDiagnostic(entry) {
+        state.diagnostics.push(normalizeDiagnostic(entry));
+
+        if (state.diagnostics.length > MAX_DIAGNOSTICS) {
+          state.diagnostics.splice(0, state.diagnostics.length - MAX_DIAGNOSTICS);
+        }
+
+        renderDiagnostics();
+      }
+
+      function addDiagnostic(source, level, message, details) {
+        appendDiagnostic({
+          timestamp: new Date().toISOString(),
+          source,
+          level,
+          message,
+          details
+        });
+      }
+
+      function replaceDiagnostics(entries) {
+        const nextEntries = Array.isArray(entries) ? entries : [];
+        const normalized = [];
+
+        for (let i = Math.max(0, nextEntries.length - MAX_DIAGNOSTICS); i < nextEntries.length; i += 1) {
+          normalized.push(normalizeDiagnostic(nextEntries[i]));
+        }
+
+        state.diagnostics = normalized;
+        renderDiagnostics();
+      }
+
+      function escaped(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function setStatus(message, kind) {
+        statusEl.textContent = message;
+        statusEl.className = "status";
+
+        if (kind === "ok" || kind === "warn" || kind === "error") {
+          statusEl.classList.add(kind);
+        }
+      }
+
+      function normalizeStylePreset(value) {
+        const raw = typeof value === "string" ? value.trim() : "";
+
+        if (raw === "generic_ux" || raw === "nothing_style" || raw === "custom") {
+          return raw;
+        }
+
+        if (raw === "clear" || raw === "professional" || raw === "friendly" || raw === "persuasive") {
+          return "generic_ux";
+        }
+
+        return "generic_ux";
+      }
+
+      function syncCustomRulesVisibility() {
+        const isCustom = stylePresetSelect.value === "custom";
+
+        if (customRulesWrap) {
+          customRulesWrap.classList.toggle("hidden", !isCustom);
+        }
+
+        customGuideInput.disabled = !isCustom;
+      }
+
+      function getSettingsFromInputs() {
+        return {
+          apiKey: apiKeyInput.value.trim(),
+          model: "gpt-5.2",
+          stylePreset: normalizeStylePreset(stylePresetSelect.value),
+          customGuide: customGuideInput.value
+        };
+      }
+
+      function applySettingsToInputs(settings) {
+        if (!settings || typeof settings !== "object") {
+          return;
+        }
+
+        if (typeof settings.apiKey === "string") {
+          apiKeyInput.value = settings.apiKey;
+        }
+
+        if (typeof settings.stylePreset === "string" && settings.stylePreset.trim().length > 0) {
+          stylePresetSelect.value = normalizeStylePreset(settings.stylePreset);
+        }
+
+        if (typeof settings.customGuide === "string") {
+          customGuideInput.value = settings.customGuide;
+        }
+
+        syncCustomRulesVisibility();
+      }
+
+      function saveLocalSettings(settings) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        } catch (error) {
+          addDiagnostic("ui", "warn", "Failed to save local settings.", sanitizeForLog(error, 0));
+        }
+      }
+
+      function loadLocalSettings() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) {
+            return null;
+          }
+
+          return JSON.parse(raw);
+        } catch (error) {
+          addDiagnostic("ui", "warn", "Failed to read local settings.", sanitizeForLog(error, 0));
+          return null;
+        }
+      }
+
+      function persistSettings() {
+        const settings = getSettingsFromInputs();
+
+        saveLocalSettings(settings);
+        postToPlugin({
+          type: "SAVE_SETTINGS",
+          settings
+        });
+      }
+
+      function updateButtons() {
+        rewriteBtn.disabled = state.busy || state.items.length === 0;
+        undoBtn.disabled = state.busy || !state.undoAvailable;
+
+        rewriteBtn.textContent = state.busy && state.busyAction === "rewrite" ? "Rewriting..." : "Rewrite all";
+        undoBtn.textContent =
+          state.busy && state.busyAction === "undo"
+            ? state.undoAllMode
+              ? "Undoing all..."
+              : "Undoing..."
+            : "Undo all";
+
+        if (state.busy) {
+          if (loadingTextEl) {
+            loadingTextEl.textContent = state.busyLabel || "Working...";
+          }
+          if (loadingStateEl) {
+            loadingStateEl.classList.remove("hidden");
+          }
+        } else if (loadingStateEl) {
+          loadingStateEl.classList.add("hidden");
+        }
+      }
+
+      function setBusy(action, label) {
+        state.busy = true;
+        state.busyAction = action || "rewrite";
+        state.busyLabel = label || "Working...";
+        updateButtons();
+      }
+
+      function updateBusyLabel(label) {
+        if (!state.busy) {
+          return;
+        }
+        state.busyLabel = label || state.busyLabel;
+        updateButtons();
+      }
+
+      function clearBusy() {
+        state.busy = false;
+        state.busyAction = "";
+        state.busyLabel = "";
+        state.undoAllMode = false;
+        state.undoAllTotals = null;
+        updateButtons();
+      }
+
+      function renderSummary() {
+        const model = buildSelectionModel(state.items);
+        let pendingCount = 0;
+        for (let i = 0; i < model.groups.length; i += 1) {
+          if (model.groups[i].isDirty) {
+            pendingCount += 1;
+          }
+        }
+
+        const parts = [];
+        parts.push(String(state.lastSelectionCount) + " selected node(s)");
+        parts.push(String(model.uniqueCount) + " unique string(s)");
+        parts.push(String(state.lastTextNodeCount) + " text layer(s)");
+        parts.push(String(pendingCount) + " pending update(s)");
+        parts.push(state.undoAvailable ? "Undo available" : "No undo yet");
+        summaryEl.textContent = parts.join(" • ");
+      }
+
+      function renderItems() {
+        if (state.items.length === 0) {
+          itemsEl.innerHTML = '<p class="empty">No text layers in current selection.</p>';
+          return;
+        }
+
+        const model = buildSelectionModel(state.items);
+        const groups = model.groups;
+        const blocks = [];
+
+        for (let i = 0; i < groups.length; i += 1) {
+          const group = groups[i];
+          const label = group.sampleName;
+          const instanceChip =
+            group.layerCount > 1
+              ? '<span class="instance-chip" title="' +
+                String(group.layerCount) +
+                ' instances">' +
+                String(group.layerCount) +
+                "</span>"
+              : "";
+          const changeChip =
+            '<span class="change-chip ' +
+            (group.isRewriteChanged ? "ai" : "edit") +
+            (group.isDirty ? "" : " hidden") +
+            '">' +
+            (group.isRewriteChanged ? "AI changed" : "Edited") +
+            "</span>";
+          const parentLine =
+            group.layerCount > 1
+              ? String(group.layerCount) + " layers share this text. Example parent: " + group.sampleParentName
+              : "Parent: " + group.sampleParentName;
+          const missing =
+            group.missingFontCount > 0
+              ? '<span class="missing">Missing font on ' +
+                String(group.missingFontCount) +
+                " layer(s): cannot update those layers yet</span>"
+              : "";
+
+          blocks.push(
+            '<article class="item">' +
+              '<div class="item-head">' +
+                '<div class="item-name">' +
+                escaped(label) +
+                "</div>" +
+                '<div class="item-meta">' +
+                  instanceChip +
+                  changeChip +
+                "</div>" +
+              "</div>" +
+              '<div class="item-parent">' +
+              escaped(parentLine) +
+              "</div>" +
+              missing +
+              '<textarea class="item-editor" data-group-id="' +
+              escaped(group.id) +
+              '">' +
+              escaped(group.draftText) +
+              "</textarea>" +
+              '<div class="item-controls">' +
+                '<button class="item-update-btn' +
+                (group.isDirty ? "" : " hidden") +
+                '" type="button" data-update-group-id="' +
+                escaped(group.id) +
+                '">Update</button>' +
+              "</div>" +
+              "</article>"
+          );
+        }
+
+        itemsEl.innerHTML = blocks.join("");
+
+        for (const textarea of itemsEl.querySelectorAll("textarea[data-group-id]")) {
+          textarea.addEventListener("input", handleGroupTextInput);
+          textarea.addEventListener("keydown", handleGroupEditorKeydown);
+        }
+
+        for (const button of itemsEl.querySelectorAll("button[data-update-group-id]")) {
+          button.addEventListener("click", () => {
+            const groupId = button.getAttribute("data-update-group-id");
+            applyGroupUpdate(groupId);
+          });
+        }
+      }
+
+      function handleGroupTextInput(event) {
+        const target = event && event.target;
+        if (!target) {
+          return;
+        }
+
+        const groupId = target.getAttribute("data-group-id");
+        if (!groupId) {
+          return;
+        }
+
+        const nextText = target.value;
+        const currentText = state.groupCurrentText.get(groupId) || "";
+        const isDirty = nextText !== currentText;
+
+        state.groupDrafts.set(groupId, nextText);
+        const historyEntry = state.groupHistory.get(groupId);
+        if (historyEntry && Array.isArray(historyEntry.ideas)) {
+          const existingIndex = historyEntry.ideas.indexOf(nextText);
+          if (existingIndex >= 0) {
+            historyEntry.index = existingIndex;
+          }
+        }
+        if (!isDirty) {
+          state.rewriteDraftGroups.delete(groupId);
+        }
+
+        const cardEl = target.closest(".item");
+        syncGroupCardUI(cardEl, groupId, isDirty);
+
+        renderSummary();
+      }
+
+      function syncGroupCardUI(cardEl, groupId, isDirty) {
+        if (!cardEl) {
+          return;
+        }
+
+        const updateButtonEl = cardEl.querySelector("button[data-update-group-id]");
+        if (updateButtonEl) {
+          updateButtonEl.classList.toggle("hidden", !isDirty);
+        }
+
+        const changeChipEl = cardEl.querySelector(".change-chip");
+        if (!changeChipEl) {
+          return;
+        }
+
+        if (!isDirty) {
+          changeChipEl.classList.add("hidden");
+          return;
+        }
+
+        const isRewriteChanged = state.rewriteDraftGroups.has(groupId);
+        changeChipEl.classList.remove("hidden");
+        changeChipEl.classList.toggle("ai", isRewriteChanged);
+        changeChipEl.classList.toggle("edit", !isRewriteChanged);
+        changeChipEl.textContent = isRewriteChanged ? "AI changed" : "Edited";
+      }
+
+      function handleGroupEditorKeydown(event) {
+        const target = event && event.target;
+        if (!target || typeof target.getAttribute !== "function") {
+          return;
+        }
+
+        const key = typeof event.key === "string" ? event.key.toLowerCase() : "";
+        const usesUndoModifier = Boolean(event.metaKey || event.ctrlKey);
+
+        if (!usesUndoModifier || event.altKey || key !== "z") {
+          return;
+        }
+
+        const groupId = target.getAttribute("data-group-id");
+        if (!groupId) {
+          return;
+        }
+
+        const currentText = state.groupCurrentText.get(groupId) || "";
+        if (target.value !== currentText) {
+          return;
+        }
+
+        const step = event.shiftKey ? 1 : -1;
+        const didMove = stepGroupHistory(groupId, step, target);
+
+        if (didMove) {
+          event.preventDefault();
+        }
+      }
+
+      function stepGroupHistory(groupId, step, textareaEl) {
+        if (!groupId || step === 0 || state.busy) {
+          return false;
+        }
+
+        const model = buildSelectionModel(state.items);
+        const group = model.groups.find((entry) => entry.id === groupId);
+        if (!group) {
+          return false;
+        }
+
+        const currentDraft =
+          textareaEl && typeof textareaEl.value === "string" ? textareaEl.value : group.draftText;
+        const historyEntry = addIdeaToHistory(group.id, currentDraft, true);
+
+        if (historyEntry.ideas.length <= 1) {
+          return false;
+        }
+
+        const nextIndex = historyEntry.index + (step > 0 ? 1 : -1);
+        if (nextIndex < 0 || nextIndex >= historyEntry.ideas.length) {
+          return false;
+        }
+
+        historyEntry.index = nextIndex;
+        const nextText = historyEntry.ideas[nextIndex];
+        state.groupDrafts.set(group.id, nextText);
+
+        if (nextText === group.text) {
+          state.rewriteDraftGroups.delete(group.id);
+        }
+
+        if (textareaEl) {
+          textareaEl.value = nextText;
+          if (typeof textareaEl.setSelectionRange === "function") {
+            const end = nextText.length;
+            textareaEl.setSelectionRange(end, end);
+          }
+
+          const isDirty = nextText !== group.text;
+          syncGroupCardUI(textareaEl.closest(".item"), group.id, isDirty);
+        }
+
+        renderSummary();
+        return true;
+      }
+
+      function applyGroupUpdate(groupId) {
+        if (!groupId || state.busy) {
+          return;
+        }
+
+        const model = buildSelectionModel(state.items);
+        const group = model.groups.find((entry) => entry.id === groupId);
+
+        if (!group || !group.isDirty) {
+          return;
+        }
+
+        addIdeaToHistory(group.id, group.draftText, true);
+
+        const updates = group.nodeIds.map((nodeId) => ({
+          id: nodeId,
+          text: group.draftText
+        }));
+
+        setBusy("update", "Updating selected card...");
+        setStatus("Updating " + String(group.layerCount) + " layer(s)...", "info");
+
+        postToPlugin({
+          type: "APPLY_COPY",
+          updates
+        });
+      }
+
+      function syncSelection(items, selectionCount, textNodeCount, undoAvailable) {
+        state.items = Array.isArray(items) ? items : [];
+        state.lastSelectionCount = Number(selectionCount) || 0;
+        state.lastTextNodeCount = Number(textNodeCount) || 0;
+        state.undoAvailable = Boolean(undoAvailable);
+
+        if (state.lastSelectionCount === 0) {
+          setStatus("Select one or more frames/screens to begin.", "warn");
+        } else if (state.lastTextNodeCount === 0) {
+          setStatus("Selection has no text layers.", "warn");
+        } else {
+          setStatus("Selection loaded. Click Rewrite all to generate suggestions.", "ok");
+        }
+
+        renderSummary();
+        renderItems();
+        updateButtons();
+      }
+
+      function getPromptConfig() {
+        const preset = normalizeStylePreset(stylePresetSelect.value);
+
+        if (preset === "custom") {
+          const customGuide = customGuideInput.value.trim();
+          if (!customGuide) {
+            throw new Error("Add additional rules when Style preset is Custom.");
+          }
+
+          return {
+            systemPrompt: CUSTOM_SYSTEM_PROMPT,
+            customRules: customGuide
+          };
+        }
+
+        return {
+          systemPrompt: PRESET_SYSTEM_PROMPTS[preset] || PRESET_SYSTEM_PROMPTS.generic_ux,
+          customRules: ""
+        };
+      }
+
+      function parseModelJson(content) {
+        const trimmed = String(content || "").trim();
+
+        try {
+          return JSON.parse(trimmed);
+        } catch (error) {
+          const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+          if (fenced && fenced[1]) {
+            return JSON.parse(fenced[1].trim());
+          }
+
+          const firstBrace = trimmed.indexOf("{");
+          const lastBrace = trimmed.lastIndexOf("}");
+          if (firstBrace >= 0 && lastBrace > firstBrace) {
+            const candidate = trimmed.slice(firstBrace, lastBrace + 1);
+            return JSON.parse(candidate);
+          }
+        }
+
+        throw new Error("Model response was not valid JSON.");
+      }
+
+      function detectCaseMode(template) {
+        const text = String(template || "");
+        const letters = text.match(/[A-Za-z]/g) || [];
+
+        if (letters.length === 0) {
+          return "none";
+        }
+
+        const allUpper = letters.every((char) => char === char.toUpperCase());
+        if (allUpper) {
+          return "upper";
+        }
+
+        const allLower = letters.every((char) => char === char.toLowerCase());
+        if (allLower) {
+          return "lower";
+        }
+
+        const words = text.match(/[A-Za-z]+(?:'[A-Za-z]+)*/g) || [];
+        if (words.length > 0) {
+          const titleLike = words.every((word) => {
+            const first = word.slice(0, 1);
+            const rest = word.slice(1);
+            return first === first.toUpperCase() && rest === rest.toLowerCase();
+          });
+
+          if (titleLike) {
+            return "title";
+          }
+        }
+
+        const firstLetterMatch = text.match(/[A-Za-z]/);
+        if (firstLetterMatch && typeof firstLetterMatch.index === "number") {
+          const firstLetter = firstLetterMatch[0];
+          const tailLetters = text.slice(firstLetterMatch.index + 1).match(/[A-Za-z]/g) || [];
+          const lowerTailCount = tailLetters.filter((char) => char === char.toLowerCase()).length;
+
+          if (tailLetters.length > 0 && firstLetter === firstLetter.toUpperCase()) {
+            if (lowerTailCount / tailLetters.length >= 0.8) {
+              return "sentence";
+            }
+          }
+        }
+
+        return "mixed";
+      }
+
+      function toTitleCase(value) {
+        return String(value || "")
+          .toLowerCase()
+          .replace(/\b([a-z])/g, (match, first) => first.toUpperCase());
+      }
+
+      function toSentenceCase(value) {
+        return String(value || "")
+          .toLowerCase()
+          .replace(/[a-z]/, (first) => first.toUpperCase());
+      }
+
+      function preserveOriginalCasing(originalText, rewrittenText) {
+        const mode = detectCaseMode(originalText);
+        const value = String(rewrittenText || "");
+
+        if (mode === "upper") {
+          return value.toUpperCase();
+        }
+
+        if (mode === "lower") {
+          return value.toLowerCase();
+        }
+
+        if (mode === "title") {
+          return toTitleCase(value);
+        }
+
+        if (mode === "sentence") {
+          return toSentenceCase(value);
+        }
+
+        return value;
+      }
+
+      function buildUniqueSourceItems(items) {
+        const groupsByText = new Map();
+        const sourceItems = [];
+        const itemToGroupId = new Map();
+        const groups = [];
+        let duplicateCount = 0;
+
+        for (let i = 0; i < items.length; i += 1) {
+          const item = items[i];
+          const text = typeof item.characters === "string" ? item.characters : "";
+
+          if (groupsByText.has(text)) {
+            const existing = groupsByText.get(text);
+            itemToGroupId.set(item.id, existing.id);
+            existing.layerCount += 1;
+            existing.nodeIds.push(item.id);
+            if (item.hasMissingFont) {
+              existing.missingFontCount += 1;
+            }
+            duplicateCount += 1;
+            continue;
+          }
+
+          const groupId = item.id;
+          const group = {
+            id: groupId,
+            text,
+            sampleName: item.name || "Text",
+            sampleParentName: item.parentName || "Unknown parent",
+            layerCount: 1,
+            nodeIds: [item.id],
+            missingFontCount: item.hasMissingFont ? 1 : 0
+          };
+
+          groupsByText.set(text, group);
+          groups.push(group);
+          itemToGroupId.set(item.id, groupId);
+
+          sourceItems.push({
+            id: groupId,
+            nodeName: group.sampleName,
+            parentName: group.sampleParentName,
+            text
+          });
+        }
+
+        return {
+          sourceItems,
+          itemToGroupId,
+          groups,
+          uniqueCount: sourceItems.length,
+          duplicateCount
+        };
+      }
+
+      function ensureGroupHistory(groupId, baseText) {
+        const id = String(groupId || "");
+        let entry = state.groupHistory.get(id);
+
+        if (!entry || typeof entry !== "object") {
+          entry = {
+            ideas: [],
+            index: 0
+          };
+          state.groupHistory.set(id, entry);
+        }
+
+        if (!Array.isArray(entry.ideas)) {
+          entry.ideas = [];
+        }
+
+        const normalizedBaseText = typeof baseText === "string" ? baseText : "";
+        if (entry.ideas.length === 0) {
+          entry.ideas.push(normalizedBaseText);
+        } else if (entry.ideas.indexOf(normalizedBaseText) === -1) {
+          entry.ideas.push(normalizedBaseText);
+        }
+
+        if (typeof entry.index !== "number" || !isFinite(entry.index) || entry.index < 0) {
+          entry.index = 0;
+        }
+
+        if (entry.index >= entry.ideas.length) {
+          entry.index = entry.ideas.length - 1;
+        }
+
+        return entry;
+      }
+
+      function addIdeaToHistory(groupId, text, shouldSelect) {
+        const nextText = typeof text === "string" ? text : "";
+        const entry = ensureGroupHistory(groupId, nextText);
+        let index = entry.ideas.indexOf(nextText);
+
+        if (index === -1) {
+          entry.ideas.push(nextText);
+          index = entry.ideas.length - 1;
+        }
+
+        if (shouldSelect) {
+          entry.index = index;
+        }
+
+        return entry;
+      }
+
+      function buildSelectionModel(items) {
+        const model = buildUniqueSourceItems(items);
+        const activeIds = new Set();
+        const nextCurrentMap = new Map();
+
+        for (let i = 0; i < model.groups.length; i += 1) {
+          const group = model.groups[i];
+          activeIds.add(group.id);
+          nextCurrentMap.set(group.id, group.text);
+
+          ensureGroupHistory(group.id, group.text);
+          const incomingDraft = state.groupDrafts.has(group.id) ? state.groupDrafts.get(group.id) : group.text;
+          const historyEntry = addIdeaToHistory(group.id, incomingDraft, true);
+          const draftText = historyEntry.ideas[historyEntry.index];
+
+          group.draftText = draftText;
+          group.isDirty = draftText !== group.text;
+          group.isRewriteChanged = group.isDirty && state.rewriteDraftGroups.has(group.id);
+          group.historyCount = historyEntry.ideas.length;
+          group.historyIndex = historyEntry.index;
+
+          if (!group.isDirty) {
+            state.rewriteDraftGroups.delete(group.id);
+            state.groupDrafts.set(group.id, group.text);
+          }
+        }
+
+        for (const groupId of Array.from(state.groupDrafts.keys())) {
+          if (!activeIds.has(groupId)) {
+            state.groupDrafts.delete(groupId);
+          }
+        }
+
+        for (const groupId of Array.from(state.rewriteDraftGroups.values())) {
+          if (!activeIds.has(groupId)) {
+            state.rewriteDraftGroups.delete(groupId);
+          }
+        }
+
+        for (const groupId of Array.from(state.groupHistory.keys())) {
+          if (!activeIds.has(groupId)) {
+            state.groupHistory.delete(groupId);
+          }
+        }
+
+        state.groupCurrentText = nextCurrentMap;
+        return model;
+      }
+
+      function buildPrompts(promptConfig, sourceItems) {
+        let userPrompt =
+          'Return strict JSON only in this shape: {"updates":[{"id":"...","text":"..."}]}. Include every input id exactly once.\n\n';
+
+        userPrompt +=
+          "Preserve the original casing pattern for each string whenever possible (for example: ALL CAPS should remain ALL CAPS).\n\n";
+
+        if (promptConfig.customRules) {
+          userPrompt += "Custom style rules:\n" + promptConfig.customRules + "\n\n";
+        }
+
+        userPrompt += "Text items:\n" + JSON.stringify(sourceItems, null, 2);
+
+        return {
+          systemPrompt: promptConfig.systemPrompt,
+          userPrompt
+        };
+      }
+
+      function extractResponseText(payload) {
+        if (!payload || typeof payload !== "object") {
+          return "";
+        }
+
+        if (typeof payload.output_text === "string" && payload.output_text.trim().length > 0) {
+          return payload.output_text;
+        }
+
+        if (!Array.isArray(payload.output)) {
+          return "";
+        }
+
+        const pieces = [];
+
+        for (let i = 0; i < payload.output.length; i += 1) {
+          const outputItem = payload.output[i];
+          if (!outputItem || !Array.isArray(outputItem.content)) {
+            continue;
+          }
+
+          for (let j = 0; j < outputItem.content.length; j += 1) {
+            const contentItem = outputItem.content[j];
+            if (!contentItem || typeof contentItem !== "object") {
+              continue;
+            }
+
+            if (contentItem.type === "output_text" && typeof contentItem.text === "string") {
+              pieces.push(contentItem.text);
+            }
+          }
+        }
+
+        return pieces.join("\n");
+      }
+
+      async function requestOpenAIContent(apiKey, systemPrompt, userPrompt) {
+        const response = await fetch("https://api.openai.com/v1/responses", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + apiKey
+          },
+          body: JSON.stringify({
+            model: "gpt-5.2",
+            temperature: 0.2,
+            text: {
+              format: {
+                type: "json_object"
+              }
+            },
+            input: [
+              {
+                role: "system",
+                content: [
+                  {
+                    type: "input_text",
+                    text: systemPrompt
+                  }
+                ]
+              },
+              {
+                role: "user",
+                content: [
+                  {
+                    type: "input_text",
+                    text: userPrompt
+                  }
+                ]
+              }
+            ]
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          addDiagnostic("ui", "error", "OpenAI API request failed.", {
+            status: response.status,
+            body: truncate(errorText, 1500)
+          });
+          throw new Error("OpenAI API error (" + String(response.status) + "): " + errorText);
+        }
+
+        const payload = await response.json();
+        const content = extractResponseText(payload);
+
+        if (!content || content.trim().length === 0) {
+          throw new Error("OpenAI returned an empty response.");
+        }
+
+        return content;
+      }
+
+      async function rewriteSelection() {
+        if (state.busy) {
+          return;
+        }
+
+        if (state.items.length === 0) {
+          setStatus("No text layers found in the current selection.", "warn");
+          return;
+        }
+
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) {
+          setStatus("Enter an OpenAI API key before rewriting.", "error");
+          return;
+        }
+
+        const model = buildSelectionModel(state.items);
+        const sourceItems = model.sourceItems;
+
+        setBusy("rewrite", "Preparing rewrite...");
+        setStatus(
+          "Rewriting copy from " +
+            String(model.uniqueCount) +
+            " unique string(s), grouped from " +
+            String(state.items.length) +
+            " layer(s)...",
+          "info"
+        );
+        persistSettings();
+        addDiagnostic("ui", "info", "Rewrite batch prepared.", {
+          totalLayers: state.items.length,
+          uniqueStrings: model.uniqueCount,
+          duplicateStrings: model.duplicateCount
+        });
+
+        try {
+          const promptConfig = getPromptConfig();
+          const prompts = buildPrompts(promptConfig, sourceItems);
+          const responseText = await requestOpenAIContent(
+            apiKey,
+            prompts.systemPrompt,
+            prompts.userPrompt
+          );
+
+          const parsed = parseModelJson(responseText);
+          if (!parsed || !Array.isArray(parsed.updates)) {
+            throw new Error("Model response did not include a valid updates array.");
+          }
+
+          const updateById = new Map();
+          for (let i = 0; i < parsed.updates.length; i += 1) {
+            const update = parsed.updates[i];
+            if (!update || typeof update.id !== "string") {
+              continue;
+            }
+            if (typeof update.text !== "string") {
+              continue;
+            }
+            updateById.set(update.id, update.text);
+          }
+
+          let changedCount = 0;
+
+          for (let i = 0; i < model.groups.length; i += 1) {
+            const group = model.groups[i];
+            let nextText = group.text;
+
+            if (updateById.has(group.id)) {
+              nextText = updateById.get(group.id);
+            }
+
+            nextText = preserveOriginalCasing(group.text, nextText);
+            state.groupDrafts.set(group.id, nextText);
+            addIdeaToHistory(group.id, nextText, true);
+
+            if (nextText !== group.text) {
+              changedCount += 1;
+              state.rewriteDraftGroups.add(group.id);
+            } else {
+              state.rewriteDraftGroups.delete(group.id);
+            }
+          }
+
+          if (changedCount === 0) {
+            setStatus("Model returned no copy changes for this selection.", "warn");
+            clearBusy();
+            renderSummary();
+            renderItems();
+            return;
+          }
+
+          addDiagnostic("ui", "info", "Rewrite suggestions prepared.", {
+            changedGroups: changedCount
+          });
+          setStatus("Rewrite complete. Review cards and click Update on changed rows.", "ok");
+          clearBusy();
+          renderSummary();
+          renderItems();
+        } catch (error) {
+          const message = error && error.message ? error.message : "Rewrite failed.";
+          setStatus(message, "error");
+          addDiagnostic("ui", "error", "Rewrite flow failed.", sanitizeForLog(error, 0));
+          clearBusy();
+        }
+      }
+
+      function undoAllRewrites() {
+        if (state.busy) {
+          return;
+        }
+
+        if (!state.undoAvailable) {
+          setStatus("Nothing to undo yet.", "warn");
+          return;
+        }
+
+        state.undoAllMode = true;
+        state.undoAllTotals = {
+          restored: 0,
+          failed: 0,
+          skipped: 0
+        };
+        setBusy("undo", "Undoing all changes...");
+        setStatus("Undoing all plugin changes...", "info");
+
+        postToPlugin({
+          type: "UNDO_LAST"
+        });
+      }
+
+      function requestSelection() {
+        postToPlugin({ type: "REQUEST_SELECTION" });
+      }
+
+      function requestDiagnostics() {
+        postToPlugin({ type: "REQUEST_DIAGNOSTICS" });
+      }
+
+      function requestPersistedSettings() {
+        postToPlugin({ type: "REQUEST_SETTINGS" });
+      }
+
+      window.onmessage = (event) => {
+        try {
+          const msg = event.data && event.data.pluginMessage;
+          if (!msg || typeof msg !== "object") {
+            return;
+          }
+
+          if (msg.type === "APP_META") {
+            return;
+          }
+
+          if (msg.type === "DIAGNOSTICS_SNAPSHOT") {
+            replaceDiagnostics(msg.entries);
+            return;
+          }
+
+          if (msg.type === "DIAGNOSTIC_EVENT") {
+            appendDiagnostic(msg.entry);
+            return;
+          }
+
+          if (msg.type === "PERSISTED_SETTINGS") {
+            const incoming = msg.settings && typeof msg.settings === "object" ? msg.settings : null;
+            if (incoming) {
+              const localExisting = getSettingsFromInputs();
+              const incomingLooksEmpty =
+                (!incoming.apiKey || incoming.apiKey.length === 0) &&
+                (!incoming.customGuide || incoming.customGuide.length === 0) &&
+                incoming.model === "gpt-5.2" &&
+                incoming.stylePreset === "generic_ux";
+
+              if (incomingLooksEmpty && localExisting.apiKey) {
+                persistSettings();
+              } else {
+                applySettingsToInputs(incoming);
+                saveLocalSettings(getSettingsFromInputs());
+              }
+            }
+            return;
+          }
+
+          if (msg.type === "SELECTION_TEXTS") {
+            syncSelection(msg.items || [], msg.selectionCount || 0, msg.textNodeCount || 0, msg.undoAvailable);
+            return;
+          }
+
+          if (msg.type === "APPLY_RESULT") {
+            const applied = Number(msg.applied) || 0;
+            const failed = Number(msg.failed) || 0;
+            const skipped = Number(msg.skipped) || 0;
+
+            state.undoAvailable = Boolean(msg.undoAvailable);
+            clearBusy();
+
+            if (failed > 0) {
+              setStatus(
+                "Update applied: " +
+                  String(applied) +
+                  " updated, " +
+                  String(skipped) +
+                  " unchanged, " +
+                  String(failed) +
+                  " failed.",
+                "warn"
+              );
+            } else {
+              setStatus(
+                "Update applied: " + String(applied) + " updated, " + String(skipped) + " unchanged.",
+                "ok"
+              );
+            }
+
+            if (Array.isArray(msg.errors) && msg.errors.length > 0) {
+              addDiagnostic("main", failed > 0 ? "warn" : "info", "Apply result details.", {
+                applied,
+                failed,
+                skipped,
+                errors: msg.errors.slice(0, 20)
+              });
+            }
+
+            renderSummary();
+            renderItems();
+            return;
+          }
+
+          if (msg.type === "UNDO_RESULT") {
+            const restored = Number(msg.restored) || 0;
+            const failed = Number(msg.failed) || 0;
+            const skipped = Number(msg.skipped) || 0;
+
+            if (state.undoAllMode) {
+              if (!state.undoAllTotals) {
+                state.undoAllTotals = { restored: 0, failed: 0, skipped: 0 };
+              }
+
+              state.undoAllTotals.restored += restored;
+              state.undoAllTotals.failed += failed;
+              state.undoAllTotals.skipped += skipped;
+              state.undoAvailable = Boolean(msg.undoAvailable);
+
+              if (Array.isArray(msg.errors) && msg.errors.length > 0) {
+                addDiagnostic("main", "warn", "Undo batch details.", {
+                  restored,
+                  failed,
+                  skipped,
+                  errors: msg.errors.slice(0, 20)
+                });
+              }
+
+              if (msg.undoAvailable) {
+                updateBusyLabel("Undoing all changes...");
+                postToPlugin({
+                  type: "UNDO_LAST"
+                });
+                return;
+              }
+
+              const totals = state.undoAllTotals;
+              clearBusy();
+              if (totals.failed > 0) {
+                setStatus(
+                  "Undo all finished: " +
+                    String(totals.restored) +
+                    " restored, " +
+                    String(totals.skipped) +
+                    " unchanged, " +
+                    String(totals.failed) +
+                    " failed.",
+                  "warn"
+                );
+              } else {
+                setStatus(
+                  "Undo all finished: " +
+                    String(totals.restored) +
+                    " restored, " +
+                    String(totals.skipped) +
+                    " unchanged.",
+                  "ok"
+                );
+              }
+
+              renderSummary();
+              renderItems();
+              return;
+            }
+
+            state.undoAvailable = Boolean(msg.undoAvailable);
+            clearBusy();
+
+            if (failed > 0) {
+              setStatus(
+                "Undo finished: " +
+                  String(restored) +
+                  " restored, " +
+                  String(skipped) +
+                  " unchanged, " +
+                  String(failed) +
+                  " failed.",
+                "warn"
+              );
+            } else {
+              setStatus(
+                "Undo finished: " + String(restored) + " restored, " + String(skipped) + " unchanged.",
+                "ok"
+              );
+            }
+
+            if (Array.isArray(msg.errors) && msg.errors.length > 0) {
+              addDiagnostic("main", "warn", "Undo result details.", {
+                restored,
+                failed,
+                skipped,
+                errors: msg.errors.slice(0, 20)
+              });
+            }
+
+            renderSummary();
+            renderItems();
+            return;
+          }
+
+          if (msg.type === "PLUGIN_ERROR") {
+            const errorMessage = msg.message || "Plugin runtime error.";
+            setStatus(errorMessage, "error");
+            addDiagnostic("main", "error", errorMessage, sanitizeForLog(msg.error || msg, 0));
+            clearBusy();
+            return;
+          }
+        } catch (error) {
+          setStatus("UI message error.", "error");
+          addDiagnostic("ui", "error", "UI message handling error.", sanitizeForLog(error, 0));
+          clearBusy();
+        }
+      };
+
+      window.addEventListener("error", (event) => {
+        const message =
+          (event && event.error && event.error.message) ||
+          (event && event.message) ||
+          "Unexpected UI error.";
+
+        setStatus("UI crashed: " + message, "error");
+        addDiagnostic("ui", "error", "Window error event.", {
+          message,
+          stack: (event && event.error && event.error.stack) || ""
+        });
+
+        clearBusy();
+      });
+
+      window.addEventListener("unhandledrejection", (event) => {
+        const reason = event && event.reason;
+        const message = reason && reason.message ? reason.message : String(reason || "Unknown error");
+
+        setStatus("Promise error: " + message, "error");
+        addDiagnostic("ui", "error", "Unhandled promise rejection.", sanitizeForLog(reason, 0));
+
+        clearBusy();
+      });
+
+      rewriteBtn.addEventListener("click", rewriteSelection);
+      undoBtn.addEventListener("click", undoAllRewrites);
+
+      apiKeyInput.addEventListener("change", persistSettings);
+      stylePresetSelect.addEventListener("change", () => {
+        syncCustomRulesVisibility();
+        persistSettings();
+      });
+      customGuideInput.addEventListener("change", persistSettings);
+
+      const localSettings = loadLocalSettings();
+      if (localSettings) {
+        applySettingsToInputs(localSettings);
+      }
+
+      syncCustomRulesVisibility();
+
+      addDiagnostic("ui", "info", "UI initialized.", {
+        version: UI_VERSION,
+        promptSource: HAS_BUNDLED_STYLE_PROMPTS ? "styles/style-prompts.generated.js" : "inline_fallback"
+      });
+
+      if (!HAS_BUNDLED_STYLE_PROMPTS) {
+        addDiagnostic("ui", "warn", "Style prompt bundle missing. Using fallback prompts.", {
+          expectedFile: "styles/style-prompts.generated.js",
+          remedy: "Run: node scripts/sync-style-prompts.js"
+        });
+      }
+
+      updateButtons();
+
+      postToPlugin({ type: "UI_READY" });
+      requestDiagnostics();
+      requestSelection();
+      requestPersistedSettings();
+    </script>
+  </body>
+</html>
