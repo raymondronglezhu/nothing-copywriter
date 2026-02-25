@@ -12,10 +12,8 @@ A plugin for rewriting UI copy across selected Figma screens with consistent sty
 
 ## Install from GitHub
 
-1. Open the GitHub repo:
-   - [https://github.com/raymondronglezhu/nothing-copywriter](https://github.com/raymondronglezhu/nothing-copywriter)
-2. Click the green `Code` button, then click `Download ZIP`.
-3. Unzip the downloaded file on your computer.
+1. Download the repo as a .zip file. 
+3. Unzip the downloaded file on your computer under `Code`.
 4. Open the **Figma Desktop App**.
 5. In Figma, go to:
    - `Plugins -> Development -> Import plugin from manifest...`
