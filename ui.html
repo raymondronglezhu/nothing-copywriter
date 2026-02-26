@@ -443,6 +443,14 @@
         display: none !important;
       }
 
+      .footer-note {
+        margin: 0;
+        font-size: 10px;
+        color: var(--muted);
+        text-align: center;
+        letter-spacing: 0.02em;
+      }
+
       @media (max-width: 420px) {
         .row-2,
         .actions {
@@ -484,7 +492,7 @@
           <button id="rewriteBtn" class="btn-primary" type="button">Rewrite all</button>
           <button id="undoBtn" class="btn-secondary" type="button">Undo all</button>
         </div>
-        <p class="hint">Rewrite all prepares suggested copy. Each card updates only when you press its Update button.</p>
+        <p class="hint">Rewrite all rewrites and applies in one batch. You can still fine-tune any card and press Update.</p>
         <div id="loadingState" class="loading-state hidden" aria-live="polite">
           <span id="loadingText" class="loading-text">Working...</span>
           <div class="loading-bar" aria-hidden="true">
@@ -503,6 +511,7 @@
         <summary>Diagnostics (<span id="diagCount">0</span>)</summary>
         <pre id="diagLog" class="diag-log">No diagnostics yet.</pre>
       </details>
+      <p class="footer-note">Version 1.0 by Raymond Zhu, 2026</p>
     </main>
 
     <script>
@@ -1195,7 +1204,7 @@
         } else if (state.lastTextNodeCount === 0) {
           setStatus("Selection has no text layers.", "warn");
         } else {
-          setStatus("Selection loaded. Click Rewrite all to generate suggestions.", "ok");
+          setStatus("Selection loaded. Click Rewrite all to rewrite and apply.", "ok");
         }
 
         renderSummary();
@@ -1657,6 +1666,7 @@
           }
 
           let changedCount = 0;
+          const updates = [];
 
           for (let i = 0; i < model.groups.length; i += 1) {
             const group = model.groups[i];
@@ -1673,6 +1683,12 @@
             if (nextText !== group.text) {
               changedCount += 1;
               state.rewriteDraftGroups.add(group.id);
+              for (let j = 0; j < group.nodeIds.length; j += 1) {
+                updates.push({
+                  id: group.nodeIds[j],
+                  text: nextText
+                });
+              }
             } else {
               state.rewriteDraftGroups.delete(group.id);
             }
@@ -1689,10 +1705,18 @@
           addDiagnostic("ui", "info", "Rewrite suggestions prepared.", {
             changedGroups: changedCount
           });
-          setStatus("Rewrite complete. Review cards and click Update on changed rows.", "ok");
-          clearBusy();
+          setStatus(
+            "Rewrite complete. Applying " + String(updates.length) + " layer update(s)...",
+            "info"
+          );
+          updateBusyLabel("Applying rewritten copy...");
           renderSummary();
           renderItems();
+
+          postToPlugin({
+            type: "APPLY_COPY",
+            updates
+          });
         } catch (error) {
           const message = error && error.message ? error.message : "Rewrite failed.";
           setStatus(message, "error");

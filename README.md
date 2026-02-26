@@ -31,9 +31,9 @@ A plugin for rewriting UI copy across selected Figma screens with consistent sty
 ## How to use
 
 1. Select one or more frames/screens in your Figma file.
-2. Click `Rewrite all` to generate suggestions for unique strings.
+2. Click `Rewrite all` to rewrite and apply changes in one batch.
 3. Review or edit text directly in each card.
-4. Click `Update` on a card to apply that change to your design.
+4. Click `Update` on a card if you want to apply additional manual tweaks.
 5. Click `Undo all` if you want to revert plugin-applied changes in this session.
 
 ## Optional: Editing style prompts (advanced)
